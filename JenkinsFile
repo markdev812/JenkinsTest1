@@ -1,0 +1,12 @@
+node {
+	stage 'Checkout'
+		//checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'da66ddfc-8d0e-4b3a-b8b3-fc73a3aa6a7b', url: 'git@github.com:markdev812/JenkinsTest1.git']]])
+        checkout scm
+	stage 'Build'
+		//bat 'nuget restore SolutionName.sln'
+		bat "\"${tool 'VS2015_Pipeline'}\" JenkinsTest1.sln /p:Configuration=Release /p:Platform=\"Any CPU\" /p:ProductVersion=1.0.0.${env.BUILD_NUMBER}"
+
+	stage 'Archive'
+		archive 'JenkinsTest1/bin/Release/**'
+
+}
